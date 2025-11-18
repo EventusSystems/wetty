@@ -21,8 +21,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "start": "NODE_ENV=production node .",
-    "test": "mocha",
-    "prepare": "husky install"
+    "test": "mocha"
   },
   "repository": "git://github.com/EventusSystems/wetty.git",
   "author": "Cian Butler <butlerx@notthe.cloud> (cianbutler.ie)",

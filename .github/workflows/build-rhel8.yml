@@ -1,0 +1,46 @@
+---
+name: Build RHEL 8 Package
+on:
+  workflow_dispatch:  # Manual trigger
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags
+
+jobs:
+  build-rhel8:
+    name: Build RHEL 8 Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create releases and upload assets
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build RHEL 8 Package
+        run: |
+          chmod +x ./scripts/build-rhel8-package.sh
+          ./scripts/build-rhel8-package.sh
+
+      - name: Get package version
+        id: package-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Upload Package Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wetty-eventus-rhel8-${{ steps.package-version.outputs.version }}
+          path: dist/*.tgz
+          retention-days: 90
+
+      - name: Create Release Asset (on tags)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*.tgz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,16 @@
+---
+# Docker Compose file for building RHEL 8 compatible package
+version: '3.8'
+
+services:
+  rhel8-builder:
+    build:
+      context: .
+      dockerfile: containers/rhel8-builder/Dockerfile
+      platforms:
+        - linux/amd64
+    image: wetty-rhel8-builder:latest
+    volumes:
+      - ./dist:/output
+    command: sh -c "cp /build/wetty/wetty-eventus-*.tgz /output/ && echo 'Package copied to ./dist/'"
+

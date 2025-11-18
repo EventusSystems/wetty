@@ -27,9 +27,16 @@ websockets rather than Ajax and hence better response time.
 
 ## Install
 
+### Standard Installation
+
 ```sh
 npm -g i wetty
 ```
+
+### RHEL 8 Installation
+
+For RHEL 8 machines, see the [RHEL 8 Build Guide](docs/rhel8-build.md) for
+instructions on building a compatible NPM package.
 
 ## Usage
 
